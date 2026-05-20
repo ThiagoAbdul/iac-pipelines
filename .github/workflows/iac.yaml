@@ -6,6 +6,7 @@ on:
 env:
   APP_NAME: api-demo
   WORKDIR: ./infra/iac
+  NAMESPACE: ${{ github.event.repository.name }}
 
 jobs:
   plan:
@@ -36,7 +37,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}"
+        run: terraform plan -out=tfplan -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}" -var "namespace=${NAMESPACE}"
   apply:
     needs: plan
 
