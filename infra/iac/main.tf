@@ -1,6 +1,6 @@
 module "image_repository"{
   source = "git::https://github.com/ThiagoAbdul/tf-templates.git//modules/image_repository"
-  app_name = "app_demo"
+  app_name = var.app_name
   namespace = "pipelines"
   env = local.env
 }

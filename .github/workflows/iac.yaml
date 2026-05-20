@@ -3,13 +3,17 @@ name: Terraform Apply
 on:
   workflow_dispatch:
 
+env:
+  APP_NAME: api-demo
+  WORKDIR: infra/iac
+
 jobs:
   plan:
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: iac
+        working-directory: $WORKDIR
 
     steps:
       - name: Checkout
@@ -32,18 +36,15 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}"
   apply:
     needs: plan
 
     runs-on: ubuntu-latest
 
-    # environment:
-    #   name: production
-
     defaults:
       run:
-        working-directory: iac
+        working-directory: $WORKDIR
 
     steps:
       - name: Checkout
@@ -62,4 +63,4 @@ jobs:
       - name: Terraform Apply
         run: |
           terraform init
-          terraform apply -auto-approve 
+          terraform apply -auto-approve -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}"
