@@ -12,7 +12,7 @@ on:
       - uat
 
 env:
-  IMAGE_NAME: api-demo
+  IMAGE_NAME: ${{ github.event.repository.name }}/api-demo
 
 jobs:
   build-test:
