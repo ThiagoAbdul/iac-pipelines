@@ -7,8 +7,9 @@ on:
       - uat
       - develop
   pull_request:
-    - main
-    - uat
+    branches:
+      - main
+      - uat
 
 env:
   IMAGE_NAME: api-demo

@@ -9,3 +9,7 @@ variable "env_name" {
 variable "aws_account_id" {
   type = string
 }
+
+variable "app_name"{
+  type = string
+}

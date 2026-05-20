@@ -3,6 +3,9 @@ name: Terraform Apply
 on:
   workflow_dispatch:
 
+env:
+  APP_NAME: api-demo
+
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -16,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
-      - uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -32,14 +35,11 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}"
   apply:
     needs: plan
 
     runs-on: ubuntu-latest
-
-    # environment:
-    #   name: production
 
     defaults:
       run:
@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
-      - uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -60,5 +60,6 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Apply
-        run: terraform init
-        run: terraform apply -auto-approve 
+        run: |
+          terraform init
+          terraform apply -auto-approve -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}"
