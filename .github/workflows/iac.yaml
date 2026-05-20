@@ -5,7 +5,7 @@ on:
 
 env:
   APP_NAME: api-demo
-  WORKDIR: infra/iac
+  WORKDIR: ./infra/iac
 
 jobs:
   plan:
