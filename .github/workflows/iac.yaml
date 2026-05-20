@@ -38,6 +38,13 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}" -var "namespace=${NAMESPACE}"
+
+      - name: Save plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: tfplan
+
   apply:
     needs: plan
 
@@ -61,7 +68,12 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Download plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan  
+
       - name: Terraform Apply
         run: |
           terraform init
-          terraform apply -auto-approve -var-file=environments/dev.tfvars -var "app_name=${APP_NAME}"
+          terraform apply tfplan
