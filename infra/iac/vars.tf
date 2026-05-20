@@ -10,6 +10,11 @@ variable "aws_account_id" {
   type = string
 }
 
-variable "app_name"{
+variable "app_name" {
   type = string
+}
+
+variable "namespace" {
+  type = string
+  default = null
 }
