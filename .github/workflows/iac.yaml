@@ -5,6 +5,7 @@ on:
 
 env:
   APP_NAME: api-demo
+  WORKDIR: infra/iac
 
 jobs:
   plan:
@@ -12,7 +13,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: iac
+        working-directory: $WORKDIR
 
     steps:
       - name: Checkout
@@ -43,7 +44,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: iac
+        working-directory: $WORKDIR
 
     steps:
       - name: Checkout
